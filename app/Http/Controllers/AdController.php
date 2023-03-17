@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ad;
+use App\Models\Image;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,9 +15,10 @@ class AdController extends Controller
     public function index($url)
     {
         $ad = Ad::where('url',$url)->first();
-        // return dd($ad);
+        $images = Image::where('productID',$ad->id)->limit(4)->get();
         return Inertia::render('Welcome', [
             'ad' => $ad,
+            'images' => $images,
         ]);
 
     }
