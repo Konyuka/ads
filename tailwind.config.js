@@ -15,6 +15,9 @@ module.exports = {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            backgroundImage: {
+                'bg-pattern': "url('/img/bg.png')",
+            }
         },
     },
 

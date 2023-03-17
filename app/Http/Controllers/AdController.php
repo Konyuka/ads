@@ -4,16 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Ad;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class AdController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($url)
     {
-        $ads = Ad::latest()->get();
-        return dd($ads);
+        $ad = Ad::where('url',$url)->first();
+        // return dd($ad);
+        return Inertia::render('Welcome', [
+            'ad' => $ad,
+        ]);
+
     }
 
     /**
