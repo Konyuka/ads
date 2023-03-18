@@ -17,6 +17,10 @@ use App\Http\Controllers\AdController;
 |
 */
 
+
+// push to main
+
+
 Route::get('/property/{url}', [AdController::class, 'index'])
     ->name('index');
 
