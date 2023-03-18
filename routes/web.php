@@ -20,6 +20,8 @@ use App\Http\Controllers\AdController;
 Route::get('/property/{url}', [AdController::class, 'index'])
     ->name('index');
 
+    
+
 // Route::get('property/{url}/details', 'propertyController@details')->name('properties.details');    
 
 Route::middleware([
