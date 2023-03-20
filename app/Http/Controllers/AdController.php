@@ -15,11 +15,22 @@ class AdController extends Controller
     public function index($url)
     {
         $ad = Ad::where('url',$url)->first();
-        // return dd(json_decode($ad->url));
-        $images = Image::where('productID',$ad->id)->limit(4)->get();
+        $relatedAds = Ad::where('type',$ad->type)->get();
+        $images = Image::where('productID',$ad->id)->get();
+
+        $relatedAdsImages = [];        
+        foreach ($relatedAds as $key => $value) {
+            $relatedAdsArray = Image::where('productID',$ad->id)->select('productID', 'file_name')->get();
+            $firstImage = $relatedAdsArray[0]; 
+            array_push($relatedAdsImages, $relatedAdsArray);
+        }
+        // return dd($images);
         return Inertia::render('Welcome', [
             'ad' => $ad,
             'images' => $images,
+            'relatedAds' => $relatedAds,
+            // 'relatedAdsImages' => $firstImage,
+            'relatedAdsImages' => $relatedAdsImages,
         ]);
 
     }

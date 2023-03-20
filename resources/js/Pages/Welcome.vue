@@ -3,13 +3,13 @@ import { Head, Link } from '@inertiajs/vue3';
 import { ref, onMounted, computed } from 'vue';
 
 const props = defineProps({
-  ad: Array,
+  ad: Object,
   images: Array,
+  relatedAds: Array,
+  relatedAdsImages: Array,
 });
 const currentIndex = ref(0)
 const openMenu = ref(false)
-const propMenu = ref(false)
-const projMenu = ref(false)
 
 const currentImageUrl = computed(() => {
   return props.images[currentIndex.value].file_name
@@ -20,7 +20,7 @@ const currentImageUrl2 = computed(() => {
 });
 
 onMounted(() => {
-
+  typeof(props.ad, props.images, props.relatedAds, props.relatedAdsImages)
 });
 
 const amenities = computed(() => {
@@ -70,6 +70,29 @@ const slider = (direction) => {
 
 }
 
+const getRelatedImages = (adNumber) => {
+    // const rightImage = props.relatedAdsImages.find(item => item[0].productID === adNumber);
+    console.log(adNumber)
+    for (let index = 0; index < props.relatedAdsImages.length; index++) {
+      const element = props.relatedAdsImages[index];
+      // console.log(element)
+      for (let index2 = 0; index2 < element.length; index2++) {
+        const element2 = element[index2];
+        const desiredLink = element2.file_name 
+        const link = 'https://crm.rochman-properties.co.ke/public/media/products/'+ desiredLink
+        console.log(desiredLink)
+        return link
+      }
+      // const desiredLink = element[0].file_name 
+      // const link = 'https://crm.rochman-properties.co.ke/public/media/products/'+ desiredLink
+      // console.log(link)
+    }
+
+    // return
+//  alert(adNumber)
+//  `https://crm.rochman-properties.co.ke/public/media/products/`${ getRelatedImages(relatedAd.id) }
+}
+
 </script>
 
 
@@ -83,7 +106,7 @@ const slider = (direction) => {
         <div class="flex lg:flex-1">
           <a href="#" class="shadow-xl -m-1.5 p-1.5">
             <span class="sr-only">Your Company</span>
-            <img class=" h-16 w-auto" src="https://rochman-properties.co.ke/public//assets/images/logo.png" alt="">
+            <img class=" h-16 w-auto" src="/img/logo.png" alt="">
           </a>
         </div>
         <div class="flex lg:hidden">
@@ -96,83 +119,25 @@ const slider = (direction) => {
             </svg>
           </button>
         </div>
+
         <div class="hidden lg:flex lg:gap-x-12">
           <a href="https://rochman-properties.co.ke/"
-            class="transform translate hover:scale-150 duration-700 ease-in-out text-lg font-extrabold leading-6 text-black">
-            HOME
+            class="transform translate hover:scale-150 duration-700 ease-in-out text-lg font-extrabold leading-6 text-black hover:text-green-700">
+          HOME
+        </a>
+        <a href="https://rochman-properties.co.ke/properties/type/land-for-sale"
+          class="transform translate hover:scale-150 duration-700 ease-in-out text-lg font-extrabold leading-6 text-black hover:text-green-700">
+          LAND
           </a>
-
-
-          <div class="relative inline-block text-left">
-            <div>
-              <button @click="propMenu=!propMenu" type="button"
-                class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-lg font-extrabold text-black shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                id="menu-button" aria-expanded="true" aria-haspopup="true">
-                PROPERTIES
-                <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fill-rule="evenodd"
-                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                    clip-rule="evenodd" />
-                </svg>
-              </button>
-            </div>
-
-            <div
-              v-if="propMenu"
-              class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-              role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-              <div class="py-1" role="none">
-                <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-                <a href="https://rochman-properties.co.ke/properties/type/to-let" class="text-gray-700 block px-4 py-2 text-lg" role="menuitem" tabindex="-1"
-                  id="menu-item-0">
-                  <i class="fas fa-caret-right nr-4"></i> For Rent
-                </a>
-                <a href="https://rochman-properties.co.ke/properties/type/for-sale" class="text-gray-700 block px-4 py-2 text-lg" role="menuitem" tabindex="-1"
-                  id="menu-item-1">
-                  <i class="fas fa-caret-right nr-4"></i> For Sale
-                </a>
-                <a href="https://rochman-properties.co.ke/properties/type/land-for-sale" class="text-gray-700 block px-4 py-2 text-lg" role="menuitem" tabindex="-1"
-                  id="menu-item-1">
-                  <i class="fas fa-caret-right nr-4"></i> Land
-                </a>
-              </div>
-            </div>
-        </div>
-
-
-            <div class="relative inline-block text-left">
-              <div>
-                <button @click="projMenu = !projMenu" type="button"
-                  class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-lg font-extrabold text-black shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                  id="menu-button" aria-expanded="true" aria-haspopup="true">
-                  PROJECTS
-                  <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fill-rule="evenodd"
-                      d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                      clip-rule="evenodd" />
-                  </svg>
-                </button>
-              </div>
-
-              <div
-                v-if="projMenu"
-                class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-                <div class="py-1" role="none">
-                  <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-                  <a href="https://rochman-properties.co.ke/properties/type/ongoing-projects" class="text-gray-700 block px-4 py-2 text-lg" role="menuitem" tabindex="-1"
-                    id="menu-item-0">
-                    <i class="fas fa-caret-right nr-4"></i> Ongoing Projects</a>
-                  <a href="https://rochman-properties.co.ke/properties/type/completed-projects" class="text-gray-700 block px-4 py-2 text-lg" role="menuitem" tabindex="-1"
-                    id="menu-item-1"> <i class="fas fa-caret-right nr-4"></i> Completed Projects</a>
-              </div>
-              </div>
-          </div>
-          <!-- <a href="https://rochman-properties.co.ke/about-us"
-            class="transform translate hover:scale-150 duration-700 ease-in-out text-xl font-semibold leading-6 text-black">
-            ABOUT</a> -->
+          <a href="https://rochman-properties.co.ke/properties/type/to-let"
+            class="transform translate hover:scale-150 duration-700 ease-in-out text-lg font-extrabold leading-6 text-black hover:text-green-700">
+            APARTMENTS
+          </a>
+          <a href="https://rochman-properties.co.ke/about-us"
+            class="transform translate hover:scale-150 duration-700 ease-in-out text-xl font-semibold leading-6 text-black hover:text-green-700">
+            ABOUT US</a>
           <a href="https://rochman-properties.co.ke/contact-us"
-            class="transform translate hover:scale-150 duration-700 ease-in-out text-xl font-semibold leading-6 text-black">
+            class="transform translate hover:scale-150 duration-700 ease-in-out text-xl font-semibold leading-6 text-black hover:text-green-700">
             CONTACTS</a>
         </div>
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -189,7 +154,7 @@ const slider = (direction) => {
           <div class="flex items-center justify-between">
             <a href="#" class="-m-1.5 p-1.5">
               <span class="sr-only">Your Company</span>
-              <img class="h-8 w-auto" src="https://rochman-properties.co.ke/public//assets/images/logo.png" alt="">
+              <img class="h-8 w-auto" src="/img/logo.png" alt="">
             </a>
             <button @click="openMenu = !openMenu" type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700">
               <span class="sr-only">Close menu</span>
@@ -205,16 +170,16 @@ const slider = (direction) => {
                 <a href="https://rochman-properties.co.ke/"
                   class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">HOME</a>
 
+                <a href="https://rochman-properties.co.ke/properties/type/land-for-sale"
+                  class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">LAND</a>
+
                 <a href="https://rochman-properties.co.ke/properties/type/to-let"
-                  class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">PROPERTIES</a>
+                  class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">APARTMENTS</a>
 
-                <a href="https://rochman-properties.co.ke/properties/type/completed-projects"
-                  class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">PROJECTS</a>
+                <a href="https://rochman-properties.co.ke/about-us"
+                  class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">ABOUT</a>
 
-                <!-- <a href="https://rochman-properties.co.ke/about-us"
-                  class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">ABOUT</a> -->
-
-                <a href="#"
+                <a href="https://rochman-properties.co.ke/contact-us"
                   class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">CONTACTS</a>
               </div>
             </div>
@@ -231,11 +196,11 @@ const slider = (direction) => {
         <div class="py-7 relative w-auto">
           <!-- Carousel wrapper -->
           <!-- <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
-                    <div class="">
-                      <img :src="`https://crm.rochman-properties.co.ke/public/media/products/${currentImageUrl}`"
-                        class="object-none absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-                    </div>
-                  </div> -->
+                      <div class="">
+                        <img :src="`https://crm.rochman-properties.co.ke/public/media/products/${currentImageUrl}`"
+                          class="object-none absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+                      </div>
+                    </div> -->
 
           <div class="px-2 sm:px-32 grid gap-4">
             <h1
@@ -457,7 +422,7 @@ const slider = (direction) => {
             <div class="relative mb-4">
             </div>
             <button
-              class="text-white bg-indigo-500 border-0 py-1 sm:py-2 px-1 sm:px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+              class="text-white bg-green-700 border-0 py-1 sm:py-2 px-1 sm:px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
               View on Google Maps
             </button>
           </div>
@@ -512,58 +477,60 @@ const slider = (direction) => {
               </div>
               <div class="mt-8 flex justify-end">
                 <button type="submit"
-                class="rounded-md bg-green-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Send
-                message</button>
+                  class="rounded-md bg-green-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Send
+                  message</button>
+              </div>
             </div>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
 
-      <div class="relative px-6 pt-24 pb-20 sm:pt-32 lg:static lg:py-48 lg:px-8">
-        <div class="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
-          <div
-            class="absolute inset-y-0 left-0 -z-10 w-full overflow-hidden bg-gray-100 ring-1 ring-gray-900/10 lg:w-1/2">
-            <svg
-              class="absolute inset-0 h-full w-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
-              aria-hidden="true">
-              <defs>
-                <pattern id="83fd4e5a-9d52-42fc-97b6-718e5d7ee527" width="200" height="200" x="100%" y="-1"
-                  patternUnits="userSpaceOnUse">
-                  <path d="M130 200V.5M.5 .5H200" fill="none" />
-                </pattern>
-              </defs>
-              <rect width="100%" height="100%" stroke-width="0" fill="white" />
-              <svg x="100%" y="-1" class="overflow-visible fill-gray-50">
-                <path d="M-470.5 0h201v201h-201Z" stroke-width="0" />
-              </svg>
-              <rect width="100%" height="100%" stroke-width="0" fill="url(#83fd4e5a-9d52-42fc-97b6-718e5d7ee527)" />
-            </svg>
-          </div>
-          <h2 class="text-6xl font-bold tracking-tight text-gray-900">Get in touch</h2>
-          <dl class="mt-10 space-y-4 text-base leading-7 text-gray-600">
-            <div class="flex gap-x-4">
-              <dt class="flex-none">
-                <span class="sr-only">Telephone</span>
-                <svg class="h-10 w-10 text-green-800" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+        <div class="relative px-6 pt-24 pb-20 sm:pt-32 lg:static lg:py-48 lg:px-8">
+          <div class="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
+            <div
+              class="absolute inset-y-0 left-0 -z-10 w-full overflow-hidden bg-gray-100 ring-1 ring-gray-900/10 lg:w-1/2">
+              <svg
+                class="absolute inset-0 h-full w-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
+                aria-hidden="true">
+                <defs>
+                  <pattern id="83fd4e5a-9d52-42fc-97b6-718e5d7ee527" width="200" height="200" x="100%" y="-1"
+                    patternUnits="userSpaceOnUse">
+                    <path d="M130 200V.5M.5 .5H200" fill="none" />
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" stroke-width="0" fill="white" />
+                <svg x="100%" y="-1" class="overflow-visible fill-gray-50">
+                  <path d="M-470.5 0h201v201h-201Z" stroke-width="0" />
                 </svg>
-              </dt>
-              <dd class="font-extrabold">1st Floor,Morningside Office Park, Ngong Road. <br> P.O. Box 58622-00200 <br>
-                Nairobi, Kenya.</dd>
+                <rect width="100%" height="100%" stroke-width="0" fill="url(#83fd4e5a-9d52-42fc-97b6-718e5d7ee527)" />
+              </svg>
             </div>
-            <hr>
-            <div class="flex gap-x-4">
-              <dt class="flex-none">
-                <span class="sr-only">Telephone</span>
-                <svg class="h-10 w-10 text-green-800" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor" aria-hidden="true">
+            <h2 class="text-6xl font-bold tracking-tight text-gray-900">Get in touch</h2>
+            <dl class="mt-10 space-y-4 text-base leading-7 text-gray-600">
+              <div class="flex gap-x-4">
+                <dt class="flex-none">
+                  <span class="sr-only">Telephone</span>
+                  <svg class="h-10 w-10 text-green-800" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+                  </svg>
+                </dt>
+                <dd class="font-extrabold">1st Floor,Morningside Office Park, Ngong Road. <br> P.O. Box 58622-00200 <br>
+                  Nairobi, Kenya.</dd>
+              </div>
+              <hr>
+              <div class="flex gap-x-4">
+                <dt class="flex-none">
+                  <span class="sr-only">Telephone</span>
+                  <svg class="h-10 w-10 text-green-800" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
-                </svg>
-              </dt>
-              <dd><a class="hover:text-gray-900 font-extrabold" href="tel:+1 (555) 234-5678">+254 707 111 777</a></dd>
+                  </svg>
+                </dt>
+                <dd><a
+                  class="hover:text-gray-900 font-extrabold transform translate hover:scale-150 duration-700 ease-in-out hover:italic text-blue-600"
+                  href="tel:+254 707 111 777">+254 707 111 777</a></dd>
             </div>
             <hr>
             <div class="flex gap-x-4">
@@ -573,144 +540,88 @@ const slider = (direction) => {
                   stroke="currentColor" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                </svg>
-              </dt>
-              <dd><a class="hover:text-gray-900 font-extrabold"
-                  href="mailto:hello@example.com">sales@rochman-properties.co.ke</a></dd>
-            </div>
-          </dl>
+                  </svg>
+                </dt>
+                <dd><a
+                    class="hover:text-gray-900 font-extrabold transform translate hover:scale-150 duration-700 ease-in-out hover:italic text-blue-600"
+                    href="mailto:sales@rochman-properties.co.ke">sales@rochman-properties.co.ke</a></dd>
+              </div>
+            </dl>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- <div class="bg-white py-24 sm:py-32">
+    <!-- <div class="bg-white py-24 sm:py-32">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl text-center">
-          <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Suggested Properties</h2>
-          <p class="mt-2 text-lg leading-8 text-gray-600">
-            Feature Coming Soon
-          </p>
+          <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Related Properties</h2>
         </div>
         <div
-          class="mx-auto mt-16 grid max-w-2xl auto-rows-fr grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+          class="mx-auto mt-16 grid max-w-3xl auto-rows-fr grid-cols-1 gap-2 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-4">
 
           <article
-            class="relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80">
-            <img src="https://crm.rochman-properties.co.ke/public/media/products/tXahKVPhoto-7-800x533.jpeg" alt=""
+           v-for="relatedAd in relatedAds.slice(0, 4)"
+            class="trasform shadow-2xl relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80">
+            <img :src="getRelatedImages(relatedAd.id)" alt=""
               class="absolute inset-0 -z-10 h-full w-full object-cover">
             <div class="absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
             <div class="absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
 
             <div class="flex flex-wrap items-center gap-y-1 overflow-hidden text-sm leading-6 text-white">
-              <time datetime="2020-03-16" class="mr-8">KES 75,000</time>
               <div class="-ml-4 flex items-center gap-x-4">
-                    <svg viewBox="0 0 2 2" class="-ml-0.5 h-0.5 w-0.5 flex-none fill-white/50">
-                      <circle cx="1" cy="1" r="1" />
-                    </svg>
-                    <div class="flex gap-x-2.5">
-                      Ngong Road
-                    </div>
-                  </div>
+                <svg viewBox="0 0 2 2" class="-ml-0.5 h-0.5 w-0.5 flex-none fill-white/50">
+                  <circle cx="1" cy="1" r="1" />
+                </svg>
+                <div class="text-lg flex gap-x-1 text-white">
+                  {{ relatedAd.product_name  }}
+                </div>
+              </div>
             </div>
-            <h3 class="mt-3 text-lg font-semibold leading-6 text-white">
-                  <a href="#">
-                    <span class="absolute inset-0"></span>
-                    Woodly Springs
-                  </a>
-                </h3>
-              </article>
+            <time datetime="2020-03-16" class="text-green-600 mr-8 text-lg font-extrabold">KES {{  formatMoney(relatedAd.price) }}</time>
+            <h3 class="mt-3 text-xs font-semibold leading-6 text-white">
+              <a href="#">
+                <span class="absolute inset-0"></span>
+                {{  relatedAd.location }}
+              </a>
+            </h3>
+          </article>
 
-              <article
-                class="relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80">
-                <img
-                  src="https://crm.rochman-properties.co.ke/public/media/products/tt0haGamara-classic-front-dusk-800x533.jpg"
-                  alt="" class="absolute inset-0 -z-10 h-full w-full object-cover">
-                <div class="absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
-                <div class="absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
 
-                <div class="flex flex-wrap items-center gap-y-1 overflow-hidden text-sm leading-6 text-white">
-                  <time datetime="2020-03-16" class="mr-8">KES 450,000</time>
-                  <div class="-ml-4 flex items-center gap-x-4">
-                    <svg viewBox="0 0 2 2" class="-ml-0.5 h-0.5 w-0.5 flex-none fill-white/50">
-                      <circle cx="1" cy="1" r="1" />
-                    </svg>
-                  <div class="flex gap-x-2.5">
-                    Ngong Road
-                  </div>
-                </div>
-              </div>
-              <h3 class="mt-3 text-lg font-semibold leading-6 text-white">
-                <a href="#">
-                  <span class="absolute inset-0"></span>
-                  Amara Ridge
-                </a>
-              </h3>
-            </article>
-
-            <article
-              class="relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80">
-              <img
-                src="https://crm.rochman-properties.co.ke/public/media/products/6Rgyhvkaren-bel-air-country-homes-4-bedroom-2-sq-0.jpg"
-                alt="" class="absolute inset-0 -z-10 h-full w-full object-cover">
-              <div class="absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
-              <div class="absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
-
-              <div class="flex flex-wrap items-center gap-y-1 overflow-hidden text-sm leading-6 text-white">
-                <time datetime="2020-03-16" class="mr-8">KES 350,000</time>
-                <div class="-ml-4 flex items-center gap-x-4">
-                  <svg viewBox="0 0 2 2" class="-ml-0.5 h-0.5 w-0.5 flex-none fill-white/50">
-                    <circle cx="1" cy="1" r="1" />
-                  </svg>
-                  <div class="flex gap-x-2.5">
-                    Ngong Road
-                  </div>
-                </div>
-              </div>
-              <h3 class="mt-3 text-lg font-semibold leading-6 text-white">
-                <a href="#">
-                  <span class="absolute inset-0"></span>
-                  Bel Air
-                </a>
-              </h3>
-            </article>
-
-          </div>
         </div>
-      </div> -->
+      </div>
+    </div> -->
 
 
   </div>
 
   <div class="">
     <div class="cursor:pointer fixed z-50 bottom-5 right-8  flex">
-      <!-- <a @click.prevent="goToCart()" href="#" class="mr-4 fa-2xl text-black fa-solid fa-cart-shopping p-1">
-        </a>
-      -->
 
       <div class="flex flex-col-reverse">
-        <a class="hover:shadow-2xl transform transition hover:scale-150 duration-700 ease-in-out"
-          href="https://www.facebook.com/RochmanPropertiesLtd" target="_blank">
-          <i class="text-blue-600 fab fa-facebook fa-2x mb-4"></i>
-        </a>
-        <a class="hover:shadow-2xl transform transition hover:scale-150 duration-700 ease-in-out"
-          href="https://www.instagram.com/rochmanpropertieslimited/" target="_blank">
-          <i class="text-orange-400 fab fa-instagram fa-2x mb-4"></i>
-        </a>
-        <a class="hover:shadow-2xl transform transition hover:scale-150 duration-700 ease-in-out"
-          href="https://twitter.com/rochmangroup" target="_blank">
-          <i class="text-cyan-400 fab fa-twitter fa-2x mb-4"></i>
-        </a>
-        <a class="hover:shadow-2xl transform transition hover:scale-150 duration-700 ease-in-out"
+        <!-- <a class="hover:shadow-2xl transform transition hover:scale-150 duration-700 ease-in-out"
+            href="https://www.facebook.com/RochmanPropertiesLtd" target="_blank">
+            <i class="text-blue-600 fab fa-facebook fa-2x mb-4"></i>
+          </a>
+          <a class="hover:shadow-2xl transform transition hover:scale-150 duration-700 ease-in-out"
+            href="https://www.instagram.com/rochmanpropertieslimited/" target="_blank">
+            <i class="text-orange-400 fab fa-instagram fa-2x mb-4"></i>
+          </a>
+          <a class="hover:shadow-2xl transform transition hover:scale-150 duration-700 ease-in-out"
+            href="https://twitter.com/rochmangroup" target="_blank">
+            <i class="text-cyan-400 fab fa-twitter fa-2x mb-4"></i>
+          </a> -->
+        <a class="hover:animate-pulse hover:shadow-2xl transform transition hover:scale-150 duration-700 ease-in-out"
           href="https://api.whatsapp.com/send?phone=254707111777&text=Hey%20Rochman!%20I%20would%20like%20to%20have%20a%20chat%20concerning%20one%20of%20your%20properties.%20Kindly%20reach%20out.%20Thank%20you"
           target="_blank">
-          <i class="text-green-600 fab fa-whatsapp fa-2x mb-4"></i>
+          <i class="text-green-600 fab fa-whatsapp fa-3x mb-4"></i>
         </a>
       </div>
+    </div>
+
+
   </div>
-
-
-</div></template>
+</template>
 
 <style>#map {
   height: 180px;
