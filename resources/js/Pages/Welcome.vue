@@ -137,22 +137,20 @@ const slider = (direction) => {
           <div class="mt-6 flow-root">
             <div class="-my-6 divide-y divide-gray-500/10">
               <div class="space-y-2 py-6">
-                <a href="#"
-                  class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Product</a>
+                <a href="https://rochman-properties.co.ke/"
+                  class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">HOME</a>
+
+                <a href="https://rochman-properties.co.ke/properties/type/to-let"
+                  class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">PROPERTIES</a>
+
+                <a href="https://rochman-properties.co.ke/properties/type/completed-projects"
+                  class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">PROJECTS</a>
+
+                <a href="https://rochman-properties.co.ke/about-us"
+                  class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">ABOUT</a>
 
                 <a href="#"
-                  class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Features</a>
-
-                <a href="#"
-                  class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Marketplace</a>
-
-                <a href="#"
-                  class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Company</a>
-              </div>
-              <div class="py-6">
-                <a href="#"
-                  class="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log
-                  in</a>
+                  class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">CONTACTS</a>
               </div>
             </div>
           </div>

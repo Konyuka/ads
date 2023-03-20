@@ -15,7 +15,7 @@ class AdController extends Controller
     public function index($url)
     {
         $ad = Ad::where('url',$url)->first();
-        // return dd($ad);
+        // return dd(json_decode($ad->url));
         $images = Image::where('productID',$ad->id)->limit(4)->get();
         return Inertia::render('Welcome', [
             'ad' => $ad,
