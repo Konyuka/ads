@@ -1,6 +1,7 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import { ref, onMounted, computed } from 'vue';
+import axios from "axios";
 
 const props = defineProps({
   ad: Object,
@@ -8,19 +9,32 @@ const props = defineProps({
   relatedAds: Array,
   relatedAdsImages: Array,
 });
+
 const currentIndex = ref(0)
 const openMenu = ref(false)
+const form = useForm({
+  fname: null,
+  lname: null,
+  email: null,
+  phone: null,
+  message: null,
+})
 
 const currentImageUrl = computed(() => {
   return props.images[currentIndex.value].file_name
 });
 
 const currentImageUrl2 = computed(() => {
-  return props.images[currentIndex.value + 1].file_name
+  const count = props.images.length - 1
+  if (currentIndex.value == count) {
+    return props.images[currentIndex.value].file_name
+  } else {
+    return props.images[currentIndex.value + 1].file_name
+  }
 });
 
 onMounted(() => {
-  typeof(props.ad, props.images, props.relatedAds, props.relatedAdsImages)
+  // typeof(props.ad, props.images, props.relatedAds, props.relatedAdsImages)
 });
 
 const amenities = computed(() => {
@@ -71,26 +85,38 @@ const slider = (direction) => {
 }
 
 const getRelatedImages = (adNumber) => {
-    // const rightImage = props.relatedAdsImages.find(item => item[0].productID === adNumber);
-    console.log(adNumber)
-    for (let index = 0; index < props.relatedAdsImages.length; index++) {
-      const element = props.relatedAdsImages[index];
-      // console.log(element)
-      for (let index2 = 0; index2 < element.length; index2++) {
-        const element2 = element[index2];
-        const desiredLink = element2.file_name 
-        const link = 'https://crm.rochman-properties.co.ke/public/media/products/'+ desiredLink
-        console.log(desiredLink)
-        return link
-      }
-      // const desiredLink = element[0].file_name 
-      // const link = 'https://crm.rochman-properties.co.ke/public/media/products/'+ desiredLink
-      // console.log(link)
-    }
+  const rightImage = props.relatedAdsImages.find(item => item.productID === adNumber);
+  const normalObj = Object.assign({}, rightImage);
+  if (normalObj != undefined) {
+    const link = normalObj.file_name
+    return 'https://crm.rochman-properties.co.ke/public/media/products/' + link
+  }
+}
 
-    // return
-//  alert(adNumber)
-//  `https://crm.rochman-properties.co.ke/public/media/products/`${ getRelatedImages(relatedAd.id) }
+const send = () => {
+
+  axios
+    .get('/mail')
+    .then((response) => {
+      // topics.value = response.data;
+      console.log(response.data)
+    })
+    .catch((error) => console.log(error));
+
+  // this.$Inertia.get("/mail");
+
+  // form.post(route(mail), {
+  //   // preserveScroll: true,
+  //   // onSuccess: () => {
+  //   //   form.reset();
+  //   //   alert("Product Added");
+  //   // },
+  // });
+
+  // form.post('/mail', {
+  //   preserveScroll: true,
+  //   onSuccess: () => form.reset(),
+  // })
 }
 
 </script>
@@ -123,11 +149,11 @@ const getRelatedImages = (adNumber) => {
         <div class="hidden lg:flex lg:gap-x-12">
           <a href="https://rochman-properties.co.ke/"
             class="transform translate hover:scale-150 duration-700 ease-in-out text-lg font-extrabold leading-6 text-black hover:text-green-700">
-          HOME
-        </a>
-        <a href="https://rochman-properties.co.ke/properties/type/land-for-sale"
-          class="transform translate hover:scale-150 duration-700 ease-in-out text-lg font-extrabold leading-6 text-black hover:text-green-700">
-          LAND
+            HOME
+          </a>
+          <a href="https://rochman-properties.co.ke/properties/type/land-for-sale"
+            class="transform translate hover:scale-150 duration-700 ease-in-out text-lg font-extrabold leading-6 text-black hover:text-green-700">
+            LAND
           </a>
           <a href="https://rochman-properties.co.ke/properties/type/for-sale"
             class="transform translate hover:scale-150 duration-700 ease-in-out text-lg font-extrabold leading-6 text-black hover:text-green-700">
@@ -196,11 +222,11 @@ const getRelatedImages = (adNumber) => {
         <div class="py-7 relative w-auto">
           <!-- Carousel wrapper -->
           <!-- <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
-                      <div class="">
-                        <img :src="`https://crm.rochman-properties.co.ke/public/media/products/${currentImageUrl}`"
-                          class="object-none absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-                      </div>
-                    </div> -->
+                        <div class="">
+                          <img :src="`https://crm.rochman-properties.co.ke/public/media/products/${currentImageUrl}`"
+                            class="object-none absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+                        </div>
+                      </div> -->
 
           <div class="px-2 sm:px-32 grid gap-4">
             <h1
@@ -209,9 +235,9 @@ const getRelatedImages = (adNumber) => {
             </h1>
 
             <div class="grid grid-cols-2 gap-4">
-              <img class="shadow-2xl object-none  block h-auto max-w-full rounded-lg"
+              <img class="shadow-2xl object-cover  block h-auto max-w-full rounded-lg"
                 :src="`https://crm.rochman-properties.co.ke/public/media/products/${currentImageUrl}`" alt="">
-              <img class="shadow-2xl object-none  block h-auto max-w-full rounded-lg"
+              <img class="shadow-2xl object-cover  block h-auto max-w-full rounded-lg"
                 :src="`https://crm.rochman-properties.co.ke/public/media/products/${currentImageUrl2}`" alt="">
             </div>
 
@@ -435,27 +461,28 @@ const getRelatedImages = (adNumber) => {
 
         <div class="shadow-2xl px-6 pb-24 sm:pb-32 lg:py-28 lg:px-8">
           <h2 class="mb-16 ml-14 text-6xl font-bold tracking-tight text-gray-900">Enquiries</h2>
-          <form action="#" method="POST" class="">
+          <form method="POST" class="">
             <div class="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
               <div class="grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
                 <div>
                   <label for="first-name" class="block text-sm font-semibold leading-6 text-gray-900">First name</label>
                   <div class="mt-2.5">
-                    <input type="text" name="first-name" id="first-name" autocomplete="given-name"
+                    <input v-model="form.fname" type="text" name="first-name" id="first-name" autocomplete="given-name"
                       class="block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <div v-if="form.errors.fname">{{ form.errors.fname }}</div>
                   </div>
                 </div>
                 <div>
                   <label for="last-name" class="block text-sm font-semibold leading-6 text-gray-900">Last name</label>
                   <div class="mt-2.5">
-                    <input type="text" name="last-name" id="last-name" autocomplete="family-name"
+                    <input v-model="form.lname" type="text" name="last-name" id="last-name" autocomplete="family-name"
                       class="block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                   </div>
                 </div>
                 <div class="sm:col-span-2">
                   <label for="email" class="block text-sm font-semibold leading-6 text-gray-900">Email</label>
                   <div class="mt-2.5">
-                    <input type="email" name="email" id="email" autocomplete="email"
+                    <input v-model="form.email" type="email" name="email" id="email" autocomplete="email"
                       class="block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                   </div>
                 </div>
@@ -463,23 +490,29 @@ const getRelatedImages = (adNumber) => {
                   <label for="phone-number" class="block text-sm font-semibold leading-6 text-gray-900">Phone
                     number</label>
                   <div class="mt-2.5">
-                    <input type="tel" name="phone-number" id="phone-number" autocomplete="tel"
+                    <input v-model="form.phone" type="tel" name="phone-number" id="phone-number" autocomplete="tel"
                       class="block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <div v-if="form.errors.phone">{{ form.errors.phone }}</div>
                   </div>
                 </div>
                 <div class="sm:col-span-2">
                   <label for="message" class="block text-sm font-semibold leading-6 text-gray-900">Message</label>
                   <div class="mt-2.5">
-                    <textarea name="message" id="message" rows="4"
+                    <textarea v-model="form.message" name="message" id="message" rows="4"
                       class="block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
                   </div>
                 </div>
               </div>
               <div class="mt-8 flex justify-end">
-                <button type="submit"
+                <button @click="send" type="submit"
                   class="rounded-md bg-green-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Send
                   message</button>
               </div>
+
+              <!-- <progress v-if="form.progress" :value="form.progress.percentage" max="100">
+                {{ form.progress.percentage }}%
+              </progress> -->
+
             </div>
           </form>
         </div>
@@ -501,17 +534,17 @@ const getRelatedImages = (adNumber) => {
                 <svg x="100%" y="-1" class="overflow-visible fill-gray-50">
                   <path d="M-470.5 0h201v201h-201Z" stroke-width="0" />
                 </svg>
-                <rect width="100%" height="100%" stroke-width="0" fill="url(#83fd4e5a-9d52-42fc-97b6-718e5d7ee527)" />
-              </svg>
-            </div>
-            <h2 class="text-6xl font-bold tracking-tight text-gray-900">Get in touch</h2>
-            <dl class="mt-10 space-y-4 text-base leading-7 text-gray-600">
-              <div class="flex gap-x-4">
-                <dt class="flex-none">
-                  <span class="sr-only">Telephone</span>
-                  <svg class="h-10 w-10 text-green-800" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round"
+              <rect width="100%" height="100%" stroke-width="0" fill="url(#83fd4e5a-9d52-42fc-97b6-718e5d7ee527)" />
+            </svg>
+          </div>
+          <h2 class="text-6xl font-bold tracking-tight text-gray-900">Get in touch</h2>
+          <dl class="mt-10 space-y-4 text-base leading-7 text-gray-600">
+            <div class="flex gap-x-4">
+              <dt class="flex-none">
+                <span class="sr-only">Telephone</span>
+                <svg class="h-10 w-10 text-green-800" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round"
                       d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
                   </svg>
                 </dt>
@@ -524,22 +557,22 @@ const getRelatedImages = (adNumber) => {
                   <span class="sr-only">Telephone</span>
                   <svg class="h-10 w-10 text-green-800" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
                   </svg>
                 </dt>
                 <dd><a
-                  class="hover:text-gray-900 font-extrabold transform translate hover:scale-150 duration-700 ease-in-out hover:italic text-blue-600"
-                  href="tel:+254 707 111 777">+254 707 111 777</a></dd>
-            </div>
-            <hr>
-            <div class="flex gap-x-4">
-              <dt class="flex-none">
-                <span class="sr-only">Telephone</span>
-                <svg class="h-10 w-10 text-green-800" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                    class="hover:text-gray-900 font-extrabold transform translate hover:scale-150 duration-700 ease-in-out hover:italic text-blue-600"
+                    href="tel:+254 707 111 777">+254 707 111 777</a></dd>
+              </div>
+              <hr>
+              <div class="flex gap-x-4">
+                <dt class="flex-none">
+                  <span class="sr-only">Telephone</span>
+                  <svg class="h-10 w-10 text-green-800" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                   </svg>
                 </dt>
                 <dd><a
@@ -552,19 +585,17 @@ const getRelatedImages = (adNumber) => {
       </div>
     </div>
 
-    <!-- <div class="bg-white py-24 sm:py-32">
+    <div class="bg-white py-24 sm:py-32">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl text-center">
-          <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Related Properties</h2>
+          <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Related Properties on Sale</h2>
         </div>
         <div
           class="mx-auto mt-16 grid max-w-3xl auto-rows-fr grid-cols-1 gap-2 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-4">
 
-          <article
-           v-for="relatedAd in relatedAds.slice(0, 4)"
-            class="trasform shadow-2xl relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80">
-            <img :src="getRelatedImages(relatedAd.id)" alt=""
-              class="absolute inset-0 -z-10 h-full w-full object-cover">
+          <article v-for="relatedAd in relatedAds.slice(0, 4)" target="_blank"
+            class="shadow-2xl relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80">
+            <img :src="getRelatedImages(relatedAd.id)" alt="" class="absolute inset-0 -z-10 h-full w-full object-cover">
             <div class="absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
             <div class="absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
 
@@ -574,23 +605,31 @@ const getRelatedImages = (adNumber) => {
                   <circle cx="1" cy="1" r="1" />
                 </svg>
                 <div class="text-lg flex gap-x-1 text-white">
-                  {{ relatedAd.product_name  }}
+                  {{ relatedAd.product_name }}
                 </div>
               </div>
             </div>
-            <time datetime="2020-03-16" class="text-green-600 mr-8 text-lg font-extrabold">KES {{  formatMoney(relatedAd.price) }}</time>
+            <time datetime="2020-03-16" class="text-green-600 mr-8 text-lg font-extrabold">KES {{
+              formatMoney(relatedAd.price) }}</time>
             <h3 class="mt-3 text-xs font-semibold leading-6 text-white">
-              <a href="#">
-                <span class="absolute inset-0"></span>
-                {{  relatedAd.location }}
-              </a>
+              <div class="flex felx-row justify-between">
+                <p>
+                  <span class="absolute inset-0"></span>
+                  {{ relatedAd.location }}
+                </p>
+                <a :href="`https://rochman-properties.co.ke/property/` + relatedAd.url + `/details`" target="_blank"
+                  class="trasform transition hover:scale-150 duration-700 ease-in-out">
+                  <span class="absolute inset-0"></span>
+                  View Property <i class="fas fa-caret-right"></i>
+                </a>
+              </div>
             </h3>
           </article>
 
 
         </div>
       </div>
-    </div> -->
+    </div>
 
 
   </div>
@@ -600,17 +639,17 @@ const getRelatedImages = (adNumber) => {
 
       <div class="flex flex-col-reverse">
         <!-- <a class="hover:shadow-2xl transform transition hover:scale-150 duration-700 ease-in-out"
-            href="https://www.facebook.com/RochmanPropertiesLtd" target="_blank">
-            <i class="text-blue-600 fab fa-facebook fa-2x mb-4"></i>
-          </a>
-          <a class="hover:shadow-2xl transform transition hover:scale-150 duration-700 ease-in-out"
-            href="https://www.instagram.com/rochmanpropertieslimited/" target="_blank">
-            <i class="text-orange-400 fab fa-instagram fa-2x mb-4"></i>
-          </a>
-          <a class="hover:shadow-2xl transform transition hover:scale-150 duration-700 ease-in-out"
-            href="https://twitter.com/rochmangroup" target="_blank">
-            <i class="text-cyan-400 fab fa-twitter fa-2x mb-4"></i>
-          </a> -->
+              href="https://www.facebook.com/RochmanPropertiesLtd" target="_blank">
+              <i class="text-blue-600 fab fa-facebook fa-2x mb-4"></i>
+            </a>
+            <a class="hover:shadow-2xl transform transition hover:scale-150 duration-700 ease-in-out"
+              href="https://www.instagram.com/rochmanpropertieslimited/" target="_blank">
+              <i class="text-orange-400 fab fa-instagram fa-2x mb-4"></i>
+            </a>
+            <a class="hover:shadow-2xl transform transition hover:scale-150 duration-700 ease-in-out"
+              href="https://twitter.com/rochmangroup" target="_blank">
+              <i class="text-cyan-400 fab fa-twitter fa-2x mb-4"></i>
+            </a> -->
         <a class="hover:animate-pulse hover:shadow-2xl transform transition hover:scale-150 duration-700 ease-in-out"
           href="https://api.whatsapp.com/send?phone=254707111777&text=Hey%20Rochman!%20I%20would%20like%20to%20have%20a%20chat%20concerning%20one%20of%20your%20properties.%20Kindly%20reach%20out.%20Thank%20you"
           target="_blank">
@@ -623,6 +662,8 @@ const getRelatedImages = (adNumber) => {
   </div>
 </template>
 
-<style>#map {
+<style>
+#map {
   height: 180px;
-}</style>
+}
+</style>

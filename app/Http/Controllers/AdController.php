@@ -14,41 +14,42 @@ class AdController extends Controller
      */
     public function index($url)
     {
-        $ad = Ad::where('url',$url)->first();
-        $relatedAds = Ad::where('type',$ad->type)->get();
+        $ad = Ad::where('url',$url)->select('product_name', 'id', 'price', 'type', 'amenities', 'bedrooms', 'bathrooms', 'garadge', 'size', 'stories', 'type', 'description', 'map')->first();
+        // return dd($ad);
+        $relatedAds = Ad::where('type',$ad->type)->select('id', 'product_name', 'location', 'price', 'url')->get();
         $images = Image::where('productID',$ad->id)->get();
 
         $relatedAdsImages = [];        
         foreach ($relatedAds as $key => $value) {
-            $relatedAdsArray = Image::where('productID',$ad->id)->select('productID', 'file_name')->get();
-            $firstImage = $relatedAdsArray[0]; 
+            $relatedAdsArray = Image::where('productID',$value->id)->select('productID', 'file_name')->distinct('productID')->first();
             array_push($relatedAdsImages, $relatedAdsArray);
         }
-        // return dd($images);
         return Inertia::render('Welcome', [
             'ad' => $ad,
             'images' => $images,
             'relatedAds' => $relatedAds,
-            // 'relatedAdsImages' => $firstImage,
             'relatedAdsImages' => $relatedAdsImages,
         ]);
 
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function mail(Request $request)
     {
-        //
+        return dd($request);
+        $data = $request->validate([        
+            'fname' => 'required',        
+            'lname', 
+            'email',
+            'phone' => 'required',
+            'message',
+        ]);
+
+        Mail::to('michaelsaiba84@gmail.com')->send(new ContactFormMail($data));
+        return response()->json(['message' => 'Email sent!']);
+
     }
 
     /**
