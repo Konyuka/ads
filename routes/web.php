@@ -7,8 +7,8 @@ use App\Http\Controllers\AdController;
 
 Route::get('/property/{url}', [AdController::class, 'index'])
     ->name('index');
-    
-Route::post('/mail}', [AdController::class, 'mail'])
+
+Route::post('/mail', [AdController::class, 'mail'])
     ->name('mail');
 
 Route::middleware([

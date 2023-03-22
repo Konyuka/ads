@@ -6,6 +6,9 @@ use App\Models\Ad;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Formmail;
+
 
 class AdController extends Controller
 {
@@ -38,18 +41,15 @@ class AdController extends Controller
      */
     public function mail(Request $request)
     {
-        return dd($request);
-        $data = $request->validate([        
-            'fname' => 'required',        
-            'lname', 
-            'email',
-            'phone' => 'required',
-            'message',
-        ]);
-
-        Mail::to('michaelsaiba84@gmail.com')->send(new ContactFormMail($data));
-        return response()->json(['message' => 'Email sent!']);
-
+       
+        
+        $fname = $request->fname;
+        $lname = $request->lname;
+        $phone = $request->phone;
+        $email = $request->email;
+        $messageContent = $request->message;
+        Mail::to('michaelsaiba84@gmail.com')->send(new FormMail($fname, $lname, $phone, $email,  $messageContent));
+        return redirect()->back()->with('success', 'Enquiry Sent Successfully');
     }
 
     /**
