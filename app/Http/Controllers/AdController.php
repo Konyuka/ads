@@ -7,8 +7,8 @@ use App\Models\Image;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\Formmail;
-
+use App\Mail\FormMail;
+use Illuminate\Support\Facades\Cache;
 
 class AdController extends Controller
 {
@@ -17,16 +17,31 @@ class AdController extends Controller
      */
     public function index($url)
     {
-        $ad = Ad::where('url',$url)->select('product_name', 'id', 'price', 'type', 'amenities', 'bedrooms', 'bathrooms', 'garadge', 'size', 'stories', 'type', 'description', 'map')->first();
-        // return dd($ad);
-        $relatedAds = Ad::where('type',$ad->type)->select('id', 'product_name', 'location', 'price', 'url')->get();
-        $images = Image::where('productID',$ad->id)->get();
+        $cacheDuration = env('CACHE_DURATION', 3600);
+
+
+        $ad = Cache::remember('ad'. $url, $cacheDuration, function () use ($url) {
+            return Ad::where('url',$url)->select('product_name', 'id', 'price', 'type', 'amenities', 'bedrooms', 'bathrooms', 'garadge', 'size', 'stories', 'type', 'description', 'map')->first();
+        });
+
+        $relatedAds = Cache::remember('relatedAds' .$ad, $cacheDuration, function () use ($ad){
+            return Ad::where('type',$ad->type)->select('id', 'product_name', 'location', 'price', 'url')->get();
+        });
+
+        $images = Cache::remember('images' .$ad, $cacheDuration, function () use ($ad){
+            return Image::where('productID',$ad->id)->get();
+        });
+
 
         $relatedAdsImages = [];        
         foreach ($relatedAds as $key => $value) {
-            $relatedAdsArray = Image::where('productID',$value->id)->select('productID', 'file_name')->distinct('productID')->first();
+
+            $relatedAdsArray = Cache::remember('relatedAdsArray' .$value, $cacheDuration, function () use ($value){
+                return Image::where('productID',$value->id)->select('productID', 'file_name')->distinct('productID')->first();
+            });
             array_push($relatedAdsImages, $relatedAdsArray);
         }
+
         return Inertia::render('Welcome', [
             'ad' => $ad,
             'images' => $images,
