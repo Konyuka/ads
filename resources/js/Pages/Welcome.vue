@@ -125,6 +125,7 @@ const getRelatedImages = (adNumber) => {
             class="transform translate hover:scale-150 duration-700 ease-in-out text-lg font-extrabold leading-6 text-black hover:text-green-700">
           HOME
         </a>
+        
         <a href="https://rochman-properties.co.ke/properties/type/land-for-sale"
           class="transform translate hover:scale-150 duration-700 ease-in-out text-lg font-extrabold leading-6 text-black hover:text-green-700">
           LAND
