@@ -420,24 +420,11 @@ const send = () => {
 
     <!-- map -->
     <div class="p-3 sm:p-10">
-      <section class="text-gray-600 body-font relative p-10">
+      <section class="text-gray-600 body-font relative container px-5 py-60 mx-auto">
         <div class="absolute inset-0 bg-gray-300">
           <iframe width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="map" scrolling="no"
             :src="getMap(ad.map)" style="">
           </iframe>
-        </div>
-        <div class="container px-5 py-60 mx-auto flex">
-          <div
-            class="lg:w-1/3 md:w-1/2 bg-white rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative z-10 shadow-md">
-            <div class="relative mb-4">
-            </div>
-            <div class="relative mb-4">
-            </div>
-            <button
-              class="text-white bg-green-700 border-0 py-1 sm:py-2 px-1 sm:px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-              View on Google Maps
-            </button>
-          </div>
         </div>
       </section>
     </div>
@@ -572,7 +559,7 @@ const send = () => {
     </div>
 
     <div class="bg-white py-24 sm:py-32">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="mx-auto max-w-8xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl text-center">
           <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Related Properties on Sale</h2>
         </div>
