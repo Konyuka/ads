@@ -95,14 +95,20 @@ const getRelatedImages = (adNumber) => {
 
 const send = () => {
 
-  form.post('/mail', {
-    preserveScroll: true,
-    onSuccess: () => {
-      form.reset()
-      alert("Enquiry Sent");
-    } 
-      
-  })
+  if(form.fname==null){
+    alert('Please enter first name')
+  }else if(form.phone == null){
+    alert('Please enter your phone number')
+  }else{
+    form.post('/mail', {
+      preserveScroll: true,
+      onSuccess: () => {
+        form.reset()
+        alert("Enquiry Sent");
+      } 
+    })
+  }
+
 }
 
 </script>
