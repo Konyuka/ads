@@ -483,10 +483,9 @@ const send = () => {
             </div>
             <div class="mt-8 flex justify-end">
               <button @click="send()"
-                class="rounded-md bg-green-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Send
+                class="rounded-md bg-green-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Send
                 message</button>
             </div>
-
             
 
             <!-- <progress v-if="form.progress" :value="form.progress.percentage" max="100">
