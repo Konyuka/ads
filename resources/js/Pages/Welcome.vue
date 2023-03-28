@@ -141,20 +141,11 @@ const send = () => {
         <div class="hidden lg:flex lg:gap-x-12">
           <a href="https://rochman-properties.co.ke/"
             class="transform translate hover:scale-150 duration-700 ease-in-out text-lg font-extrabold leading-6 text-black hover:text-green-700">
-<<<<<<< HEAD
-          HOME
-        </a>
-        
-        <a href="https://rochman-properties.co.ke/properties/type/land-for-sale"
-          class="transform translate hover:scale-150 duration-700 ease-in-out text-lg font-extrabold leading-6 text-black hover:text-green-700">
-          LAND
-=======
             HOME
           </a>
           <a href="https://rochman-properties.co.ke/properties/type/land-for-sale"
             class="transform translate hover:scale-150 duration-700 ease-in-out text-lg font-extrabold leading-6 text-black hover:text-green-700">
             LAND
->>>>>>> ba55cfe9bf3c9ebe387da8979731ea160f67b638
           </a>
           <a href="https://rochman-properties.co.ke/properties/type/for-sale"
             class="transform translate hover:scale-150 duration-700 ease-in-out text-lg font-extrabold leading-6 text-black hover:text-green-700">
@@ -655,4 +646,3 @@ const send = () => {
   height: 180px;
 }
 </style>
- <!-- check -->
