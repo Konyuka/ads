@@ -11,6 +11,8 @@ Route::get('/property/{url}', [AdController::class, 'index'])
 Route::post('/mail', [AdController::class, 'mail'])
     ->name('mail');
 
+
+    
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
